@@ -398,4 +398,5 @@ count  task_image                              img_coordinates   depth  priority
 395    ../dataset/frame_camera_197.png     (664,645), (845,771)  37.814         0          19700           3       3.000       100         0
 396    ../dataset/frame_camera_197.png  (1405,775), (1920,1260)   9.054         1          19700          25      28.000       100         0
 ----------------------------------------------------------------------
-Elapsed time: 281.244771 s
+Elapsed time: 266.186676 s
+group avg response time = [31.667, 30.22, 6.269, 3.116, 1.652, 1.0, 1.0, 1.0, 0, 0]

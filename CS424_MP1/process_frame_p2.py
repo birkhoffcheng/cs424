@@ -1,10 +1,6 @@
 from scheduling.misc import *
 from scheduling.TaskEntity import *
 
-# a function that returns the area value
-def myFunc(e):
-    return e[0]
-
 # read the input bounding box data from file
 box_info = read_json_file('../dataset/waymo_ground_truth_flat.json')
 
@@ -35,7 +31,7 @@ def process_frame(frame):
         area_list.append([area,cluster_boxes_index])
         cluster_boxes_index = cluster_boxes_index + 1
     # sort bounding box list according to area priority, (small area to large area)
-    area_list.sort(key=myFunc)
+    area_list.sort(key=lambda x : x[0])
     task_list = []
     priority_count = 0
     # create task list based on area priority

@@ -20,24 +20,11 @@ def process_frame(frame):
     """
 
     cluster_boxes_data = get_bbox_info(frame, box_info)
-    # student's code here.
-    # determine priority based on area size of bounding boxes
-    cluster_boxes_index = 0
-    area_list = []
-    # create list of frame's bounding boxes with [area, index]
-    for bounding_box_data in cluster_boxes_data:
-        # compute area x*y
-        area = (bounding_box_data[2] - bounding_box_data[0]) * (bounding_box_data[3] - bounding_box_data[1])
-        area_list.append([area,cluster_boxes_index])
-        cluster_boxes_index = cluster_boxes_index + 1
-    # sort bounding box list according to area priority, (small area to large area)
-    area_list.sort(key=lambda x : x[0])
+    cluster_boxes_data.sort(key=lambda x : (x[2] - x[0]) * (x[3] - x[1]))
     task_list = []
-    priority_count = 0
-    # create task list based on area priority
-    for bounding_box in area_list:
-        task = TaskEntity(image_path = frame.path, coord = cluster_boxes_data[bounding_box[1]][:4], priority = priority_count, depth = cluster_boxes_data[bounding_box[1]][4])
+    priority = 0
+    for box in cluster_boxes_data:
+        task = TaskEntity(image_path=frame.path, coord=box[:4], priority=priority, depth=box[4])
         task_list.append(task)
-        priority_count = priority_count + 1
-
+        priority += 1
     return task_list

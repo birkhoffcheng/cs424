@@ -30,7 +30,7 @@ def should_skip(box):
         diffx = abs(box[0] - pair[0])
         diffy = abs(box[1] - pair[1])
         #if difference in pixels is below a threshold then consider it the same object
-        if diffx + diffy < 10:
+        if diffx + diffy < 5:
             if frame_cnt - box_dict[pair] < 10:
                 #skip if processed less than 10 frames ago
                 return True

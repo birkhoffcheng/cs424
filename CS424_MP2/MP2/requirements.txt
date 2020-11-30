@@ -1,4 +1,4 @@
-pillow==6.2.0
+pillow==7.1.0
 numpy<1.19.0,>=1.16.0
 scipy>=1.4.1
 wget>=3.2

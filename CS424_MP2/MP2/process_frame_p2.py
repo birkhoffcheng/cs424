@@ -5,10 +5,6 @@ from scheduling.TaskEntity import *
 # read the input cluster box data from file
 box_info = read_json_file('../dataset/depth_clustering_detection_flat.json')
 
-# Check if a point (x, y) is in a Box
-def is_in(box, x, y):
-	return box.left <= x and x <= box.right and box.up <= y and y <= box.down
-
 class Box():
 	def __init__(self, left, up, right, down, distance):
 		self.left = left
@@ -18,13 +14,13 @@ class Box():
 		self.distance = distance
 
 	def is_in(self, x, y):
-		return is_in(self, x, y)
+		return self.left <= x and x <= self.right and self.up <= y and y <= self.down
 
 	# Checks if two boxes intersect
 	def intersects(self, target):
 		close_prox = abs(self.distance - target.distance) <= 10
 		target_in_self = self.is_in(target.left, target.up) or self.is_in(target.left, target.down) or self.is_in(target.right, target.up) or self.is_in(target.right, target.down)
-		self_in_target = is_in(target, self.left, self.up) or is_in(target, self.left, self.down) or is_in(target, self.right, self.up) or is_in(target, self.right, self.down)
+		self_in_target = target.is_in(self.left, self.up) or target.is_in(self.left, self.down) or target.is_in(self.right, self.up) or target.is_in(self.right, self.down)
 		return close_prox and (target_in_self or self_in_target)
 
 	# Union two boxes into a bigger box
@@ -65,6 +61,21 @@ def process_frame(frame):
 		if not processed:
 			clusters.append(target)
 
+	# Sort the clusters by area in reverse order so overlap removal always removes the small boxes
+	clusters.sort(key=lambda x : (x.down - x.up) * (x.right - x.left), reverse=True)
+	to_remove = []
+	for i in range(len(clusters)):
+		if clusters[i] in to_remove:
+			continue
+		for j in range(i+1, len(clusters)):
+			if clusters[i].intersects(clusters[j]):
+				clusters[i].union(clusters[j])
+				if clusters[j] not in to_remove:
+					to_remove.append(clusters[j])
+
+	for i in to_remove:
+		clusters.remove(i)
+
 	clusters.sort(key=lambda x : (x.down - x.up) * (x.right - x.left))
 	priority = 0
 	task_batches = []
@@ -75,3 +86,8 @@ def process_frame(frame):
 		priority += 1
 
 	return task_batches
+
+# deadline miss rate is:  0.01834862385321101
+# [51, 50, 17, 23, 16, 17, 15, 14, 0, 0]
+# average coverage: 0.720
+# average accuracy: 0.395

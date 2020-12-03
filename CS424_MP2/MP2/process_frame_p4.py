@@ -164,8 +164,3 @@ def process_frame(frame):
 
 
     return task_batches
-
-# deadline miss rate is:  0.0
-# [16, 43, 46, 51, 55, 57, 50, 51, 0, 0]
-# average coverage: 0.723
-# average accuracy: 0.394

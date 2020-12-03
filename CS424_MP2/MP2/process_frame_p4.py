@@ -17,7 +17,11 @@ class Cluster():
 
     def can_add_task(self, task, width, height):
         #If new width and height within 10% of original 
-        if width <= 1.1*self.orig_width and height <= 1.1*self.orig_height and width >= 0.9*self.orig_width and height >= 0.9*self.orig_height:
+        #if width <= 10+self.orig_width and height <= 10+self.orig_height and width >= self.orig_width-10 and height >= self.orig_height-10:
+        abs_tol = 300
+        if self.orig_width*0.8 < abs_tol or self.orig_width*0.8 < abs_tol:
+            return False
+        if width <= 1.8*self.orig_width and height <= 1.8*self.orig_height:
             #If new task close in dimension
             return True
         return False    

@@ -42,8 +42,6 @@ class Cluster():
 
 
     def can_add_task(self, task, width, height):
-        #If new width and height within 10% of original 
-        #if width <= 10+self.orig_width and height <= 10+self.orig_height and width >= self.orig_width-10 and height >= self.orig_height-10:
         abs_tol = 300
         if self.orig_width*0.8 < abs_tol or self.orig_width*0.8 < abs_tol:
             return False
@@ -63,10 +61,6 @@ class Cluster():
             self.min_dist = distance  
              
     def make_same_size(self):
-        #box[0] = top left x
-        #box[1] = top left y
-        #box[2] = bottom right x
-        #box[3] = bottom right y
         for box in self.tasks:
             #   what width should be   what width is
             xdiff = self.max_width - (box.right - box.left)
@@ -134,7 +128,6 @@ def process_frame(frame):
         clusters.remove(i)
 
 
-    # student's code here
     batched_clusters = []
     #sort boxes by smallest area to largest
     clusters.sort(key=lambda x: (x.right-x.left)*(x.down-x.up))
